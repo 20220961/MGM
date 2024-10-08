@@ -16,16 +16,6 @@
             padding: 10px;
             text-align: left;
         }
-        .status-message {
-            margin-top: 5px;
-            font-size: 12px;
-        }
-        .available {
-            color: green;
-        }
-        .unavailable {
-            color: red;
-        }
     </style>
 </head>
 <body>
@@ -84,13 +74,11 @@
                         <td>
                             <input type="text" id="loginId-${user.id}" value="${user.loginId}">
                             <button type="button" onclick="checkDuplicateLoginId(${user.id})">Check</button>
-                            <div id="loginIdStatus-${user.id}" class="status-message"></div>
                         </td>
                         <td><input type="text" id="password-${user.id}" value="${user.password}"></td> <!-- Password를 텍스트로 표시 -->
                         <td>
                             <input type="text" id="nickname-${user.id}" value="${user.nickname}">
                             <button type="button" onclick="checkDuplicateNickname(${user.id})">Check</button>
-                            <div id="nicknameStatus-${user.id}" class="status-message"></div>
                         </td>
                         <td><input type="text" id="name-${user.id}" value="${user.name}"></td>
                         <td><input type="text" id="phonenumber-${user.id}" value="${user.phonenumber}"></td>
@@ -115,16 +103,12 @@
     });
 
     function checkDuplicateLoginId(userId) {
-        const loginId = document.getElementById(`loginId-${userId}`).value; // userId를 사용하도록 수정
-        const statusElement = document.getElementById(`loginIdStatus-${userId}`);
+        const loginId = document.getElementById(`loginId-${userId}`).value;
 
         // 만약 로그인 ID가 원래 값과 동일하다면 통과 처리
         if (loginId === originalLoginId[userId]) {
-            statusElement.textContent = "사용가능한 ID입니다.";
-            statusElement.classList.remove("unavailable");
-            statusElement.classList.add("available");
+            alert("사용가능한 ID 입니다.");
             loginIdChecked[userId] = true;
-            document.getElementById(`loginId-${userId}`).disabled = true; // 수정 불가 처리
             enableUpdateButton(userId); // update 버튼 활성화 여부 확인
             return;
         }
@@ -133,16 +117,11 @@
             .then(response => response.json())
             .then(data => {
                 if (data.isDuplicate) {
-                    statusElement.textContent = "이미 사용중인 ID입니다.";
-                    statusElement.classList.remove("available");
-                    statusElement.classList.add("unavailable");
+                    alert("이미 사용중인 ID 입니다.");
                     loginIdChecked[userId] = false;
                 } else {
-                    statusElement.textContent = "사용가능한 ID입니다.";
-                    statusElement.classList.remove("unavailable");
-                    statusElement.classList.add("available");
+                    alert("사용가능한 ID 입니다.");
                     loginIdChecked[userId] = true;
-                    document.getElementById(`loginId-${userId}`).disabled = true; // 수정 불가 처리
                 }
                 enableUpdateButton(userId); // update 버튼 활성화 여부 확인
             })
@@ -151,15 +130,11 @@
 
     function checkDuplicateNickname(userId) {
         const nickname = document.getElementById(`nickname-${userId}`).value;
-        const statusElement = document.getElementById(`nicknameStatus-${userId}`);
 
         // 만약 닉네임이 원래 값과 동일하다면 통과 처리
         if (nickname === originalNickname[userId]) {
-            statusElement.textContent = "사용가능한 닉네임입니다.";
-            statusElement.classList.remove("unavailable");
-            statusElement.classList.add("available");
+            alert("사용가능한 닉네임입니다.");
             nicknameChecked[userId] = true;
-            document.getElementById(`nickname-${userId}`).disabled = true; // 수정 불가 처리
             enableUpdateButton(userId); // update 버튼 활성화 여부 확인
             return;
         }
@@ -168,16 +143,11 @@
             .then(response => response.json())
             .then(data => {
                 if (data.isDuplicate) {
-                    statusElement.textContent = "이미 사용중인 닉네임입니다.";
-                    statusElement.classList.remove("available");
-                    statusElement.classList.add("unavailable");
+                    alert("사용중인 닉네임입니다.");
                     nicknameChecked[userId] = false;
                 } else {
-                    statusElement.textContent = "사용가능한 닉네임입니다.";
-                    statusElement.classList.remove("unavailable");
-                    statusElement.classList.add("available");
+                    alert("사용가능한 닉네임입니다.");
                     nicknameChecked[userId] = true;
-                    document.getElementById(`nickname-${userId}`).disabled = true; // 수정 불가 처리
                 }
                 enableUpdateButton(userId); // update 버튼 활성화 여부 확인
             })
